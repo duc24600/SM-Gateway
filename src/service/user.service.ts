@@ -4,12 +4,14 @@ import { Repository } from 'typeorm';
 import { User } from '../entities/user.entity';
 import { UserDto } from "src/dto/user.dto";
 import axios from "axios";
+import { JwtService } from "@nestjs/jwt";
 @Injectable()
 export class UserService {
 
     constructor(
         @InjectRepository(User)
         private userRepository: Repository<User>,
+        private jwtService: JwtService,
     ) { }
 
     findAll(): Promise<User[]> {
@@ -34,6 +36,7 @@ export class UserService {
             });
             if(response.status == 200){
                 const data : User = response.data;
+                data.accessToken = await this.jwtService.signAsync(data);
                 return data;
             }
         } catch (error) {

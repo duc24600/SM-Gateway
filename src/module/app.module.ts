@@ -4,6 +4,9 @@ import { AppService } from '../service/app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/entities/user.entity';
 
+require('dotenv').config();
+console.log(process.env.DATABASE_PASSWORD);
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -15,9 +18,10 @@ import { User } from 'src/entities/user.entity';
       database: process.env.DATABASE_NAME,
       entities: [User],
       synchronize: true
-    })
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
+
 export class AppModule { }
